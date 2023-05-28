@@ -71,7 +71,7 @@ public class Televisor extends Electrodomestico {
         tamanio = scaner.nextDouble();
         System.out.print("   - TIENE SINTONIZADOR TDT (Si/No): ");
         String opc = scaner.next().toUpperCase();
-        System.out.println("--------------------------------------------------");
+        System.out.println("|--------------------------------------------------|");
         tdt = opc.equalsIgnoreCase("si");
         precioFinal();
     }

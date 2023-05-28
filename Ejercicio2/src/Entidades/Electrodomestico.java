@@ -4,6 +4,7 @@
  */
 package Entidades;
 
+import Servicio.imprimibles;
 import java.util.Scanner;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Scanner;
  * @author irina
  */
 public class Electrodomestico {
-
+   private imprimibles imp = new imprimibles();
    protected Scanner scaner = new Scanner(System.in);
     /*
     *Crear una superclase llamada Electrodoméstico con los siguientes atributos: precio, color,
@@ -117,16 +118,19 @@ public class Electrodomestico {
     *       precio se le da un valor base de $1000.
      */
     public void crearElectrodomestico() {
-        System.out.println("--------------------------------------------------");
-        System.out.println("         INGRESE LA SIGUIENTE INFORMACION         ");
-        System.out.println("--------------------------------------------------");
+        System.out.println("|--------------------------------------------------|");
+        System.out.println("|         INGRESE LA SIGUIENTE INFORMACION         |");
+        System.out.println("|--------------------------------------------------|");
+        imp.selecColor();
         System.out.print("   - COLOR: ");
         comprobarColor(scaner.next());
+        imp.selecConsumoEn();
         System.out.print("   - CONSUMO ENERGETICO: ");
         comprobarConsumoEnergetico(scaner.next().toUpperCase().charAt(0));
+        imp.selecPeso();
         System.out.print("   - PESO: ");
         this.peso = scaner.nextDouble();
-        System.out.println("--------------------------------------------------");
+        System.out.println("|--------------------------------------------------|");
     }
 
     /*

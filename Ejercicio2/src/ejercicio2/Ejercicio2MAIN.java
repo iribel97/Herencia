@@ -6,6 +6,7 @@ package ejercicio2;
 
 import EntidadesHijas.Lavadora;
 import EntidadesHijas.Televisor;
+import Servicio.menuElectrodomestico;
 
 /**
  *
@@ -59,14 +60,9 @@ public class Ejercicio2MAIN {
     *el precio final de los dos electrodomésticos.
     */
     public static void main(String[] args) {
-        Lavadora lavadora = new Lavadora();
-        Televisor tv = new Televisor();
+        menuElectrodomestico serv = new menuElectrodomestico();
+        serv.menu();
         
-        lavadora.crearElectrodomestico();
-        System.out.println(" SU PRECIO TOTAL ES DE: " + lavadora.getPrecio());
-        
-        tv.crearElectrodomestico();
-        System.out.println(" SU PRECIO TOTAL ES DE: " + tv.getPrecio());
     }
     
 }

@@ -54,7 +54,7 @@ public class Lavadora extends Electrodomestico {
         super.crearElectrodomestico();
         System.out.print("   - CARGA DE LA LAVADORA: ");
         this.carga = scaner.nextDouble();
-        System.out.println("--------------------------------------------------");
+        System.out.println("|--------------------------------------------------|");
         precioFinal();
     }
     
