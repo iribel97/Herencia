@@ -40,7 +40,7 @@ public class AlquilarBarcos {
         int opc, anio;
         String matricula;
         double eslora;
-        boolean bandera = false;
+        boolean bandera;
         do {
             System.out.println("|--------------------------------------------------|");
             System.out.println("|             VAMOS A AGREGAR UN BARCO             |");
@@ -49,58 +49,69 @@ public class AlquilarBarcos {
             System.out.println("|     2.- BARCO MOTOR                              |");
             System.out.println("|     3.- YATE                                     |");
             System.out.println("|--------------------------------------------------|");
-            System.out.print("   SELECCIONE TIPO DE BARCO A AGREGAR: ");
-            opc = scaner.nextInt();
-            System.out.println("|--------------------------------------------------|");
-            System.out.println("|               INGRESEMOS LOS DATOS               |");
-            System.out.println("|--------------------------------------------------|");
-            if (opc > 3) {
-                System.out.println("|--------------------------------------------------|");
-                System.out.println("|   OPCION INCORRECTA, INTENTELO DE NUEVO          |");
-                System.out.println("|--------------------------------------------------|");
-            } else {
-                do {
-                    System.out.print("    MATRICULA: ");
-                    matricula = scaner.next();
-                    for (Barco barco : barcos) {
-                        if (barco.getMatricula().equalsIgnoreCase(matricula)) {
-                            bandera = true;
-                            break;
+            try {
+                System.out.print("   SELECCIONE TIPO DE BARCO A AGREGAR: ");
+                opc = scaner.nextInt();
+                if (opc > 3) {
+                    mensajeE1();
+                } else {
+                    System.out.println("|--------------------------------------------------|");
+                    System.out.println("|               INGRESEMOS LOS DATOS               |");
+                    System.out.println("|--------------------------------------------------|");
+                    do {
+                        bandera = false;
+                        System.out.print("    MATRICULA: ");
+                        matricula = scaner.next();
+                        for (Barco barco : barcos) {
+                            if (barco.getMatricula().equalsIgnoreCase(matricula)) {
+                                bandera = true;
+                                break;
+                            }
                         }
-                    }
-                    if (bandera) {
-                        System.out.println("|--------------------------------------------------|");
-                        System.out.println("| YA EXISTE OTRO BARCO CON LA MISMA MATRICULA,     |");
-                        System.out.println("| INTENTELO NUEVAMENTE                             |");
-                        System.out.println("|--------------------------------------------------|");
-                    }
-                } while (bandera);
-                System.out.print("    ESLORA: ");
-                eslora = scaner.nextDouble();
-                System.out.print("    AÑO DE FABRICACIÓN: ");
-                anio = scaner.nextInt();
-                switch (opc) {
-                    case 1:
-                        System.out.print("    NUMERO DE MASTILES: ");
-                        barcos.add(new BarcoVelero(scaner.nextInt(), matricula, eslora, anio));
+                        if (bandera) {
+                            System.out.println("|--------------------------------------------------|");
+                            System.out.println("| YA EXISTE OTRO BARCO CON LA MISMA MATRICULA,     |");
+                            System.out.println("| INTENTELO NUEVAMENTE                             |");
+                            System.out.println("|--------------------------------------------------|");
+                        }
+                    } while (bandera);
+                    System.out.print("    ESLORA: ");
+                    eslora = scaner.nextDouble();
+                    System.out.print("    AÑO DE FABRICACIÓN: ");
+                    anio = scaner.nextInt();
+                    switch (opc) {
+                        case 1:
+                            System.out.print("    NUMERO DE MASTILES: ");
+                            barcos.add(new BarcoVelero(scaner.nextInt(), matricula, eslora, anio));
 
-                    case 2:
-                        System.out.print("    POTENCIA CV: ");
-                        barcos.add(new BarcoMotor(scaner.nextInt(), matricula, eslora, anio));
-                    default:
-                        System.out.print("    POTENCIA CV: ");
-                        int potencia = scaner.nextInt();
-                        System.out.print("    NUMERO DE CAMAROTES: ");
-                        int numCam = scaner.nextInt();
-                        barcos.add(new BarcoYate(numCam, potencia, matricula, eslora, anio));
+                        case 2:
+                            System.out.print("    POTENCIA CV: ");
+                            barcos.add(new BarcoMotor(scaner.nextInt(), matricula, eslora, anio));
+                        default:
+                            System.out.print("    POTENCIA CV: ");
+                            int potencia = scaner.nextInt();
+                            System.out.print("    NUMERO DE CAMAROTES: ");
+                            int numCam = scaner.nextInt();
+                            barcos.add(new BarcoYate(numCam, potencia, matricula, eslora, anio));
+                    }
                 }
+            } catch (Exception e) {
+                mensajeE1();
+                opc = 4;
             }
+
         } while (opc > 3);
 
     }
 
-    private boolean confirmarAdmin(String usuario) {
-        return usuario.equalsIgnoreCase("ADMIN");
+    private boolean confirmarAdmin(String contUsuario) {
+        return contUsuario.equalsIgnoreCase("07Admin");
+    }
+
+    private void mensajeE1() {
+        System.out.println("|--------------------------------------------------|");
+        System.out.println("| OPCION DIGITADA NO PERTENECE A LAS OPCIONES      |");
+        System.out.println("|--------------------------------------------------|");
     }
 
     public void Mostrar() {
@@ -116,14 +127,10 @@ public class AlquilarBarcos {
                 System.out.print("   SELECCIONE UNA OPCION: ");
                 opc = scaner.nextInt();
                 if (opc > 2) {
-                    System.out.println("|--------------------------------------------------|");
-                    System.out.println("| OPCION DIGITADA NO PERTENECE A LAS OPCIONES      |");
-                    System.out.println("|--------------------------------------------------|");
+                    mensajeE1();
                 }
             } catch (Exception e) {
-                System.out.println("|--------------------------------------------------|");
-                System.out.println("| OPCION DIGITADA NO PERTENECE A LAS OPCIONES      |");
-                System.out.println("|--------------------------------------------------|");
+                mensajeE1();
                 opc = 3;
             }
         } while (opc > 2);
