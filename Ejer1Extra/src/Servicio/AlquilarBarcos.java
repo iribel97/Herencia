@@ -118,12 +118,12 @@ public class AlquilarBarcos {
                         contra = scaner.next();
                         if (confirmarAdmin(contra, nombre)) {
                             opcAdmin();
-                        }else{
-                            if(clientes.isEmpty() || 
-                                    !verificarCliente(nombre, contra)){
+                        } else {
+                            if (clientes.isEmpty()
+                                    || !verificarCliente(nombre, contra)) {
                                 imp.mensajeE3();
-                            }else if(verificarCliente(nombre, contra)) {
-                                
+                            } else if (verificarCliente(nombre, contra)) {
+
                             }
                         }
                         break;
@@ -144,14 +144,18 @@ public class AlquilarBarcos {
     private void opcAdmin() {
         int opc;
         imp.menuAdmin();
-        System.out.println("     SELECCIONE UNA OPCION: ");
+        try {
+            System.out.println("     SELECCIONE UNA OPCION: ");
+        } catch (Exception e) {
+
+        }
 
     }
-    
-    private boolean verificarCliente(String usu, String cont){
-        for(Cliente aux : clientes){
-            if (aux.getNombreCli().equalsIgnoreCase(usu) &&
-                    aux.getIdCli().equalsIgnoreCase(cont)) {
+
+    private boolean verificarCliente(String usu, String cont) {
+        for (Cliente aux : clientes) {
+            if (aux.getNombreCli().equalsIgnoreCase(usu)
+                    && aux.getIdCli().equalsIgnoreCase(cont)) {
                 return true;
             }
         }
