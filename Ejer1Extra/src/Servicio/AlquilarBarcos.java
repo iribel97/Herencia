@@ -20,6 +20,7 @@ public class AlquilarBarcos {
     private Scanner scaner = new Scanner(System.in);
     private ArrayList<Cliente> clientes = new ArrayList();
     private ArrayList<Barco> barcos = new ArrayList();
+    private Imprimibles imp = new Imprimibles();
 
     private void crearMuelle() {
         //public BarcoVelero(int numMastiles, String matricula, double eslora, int anioFab)
@@ -42,18 +43,12 @@ public class AlquilarBarcos {
         double eslora;
         boolean bandera;
         do {
-            System.out.println("|--------------------------------------------------|");
-            System.out.println("|             VAMOS A AGREGAR UN BARCO             |");
-            System.out.println("|--------------------------------------------------|");
-            System.out.println("|     1.- BARCO VELERO                             |");
-            System.out.println("|     2.- BARCO MOTOR                              |");
-            System.out.println("|     3.- YATE                                     |");
-            System.out.println("|--------------------------------------------------|");
+            imp.menuB();
             try {
                 System.out.print("   SELECCIONE TIPO DE BARCO A AGREGAR: ");
                 opc = scaner.nextInt();
                 if (opc > 3) {
-                    mensajeE1();
+                    imp.mensajeE1();
                 } else {
                     System.out.println("|--------------------------------------------------|");
                     System.out.println("|               INGRESEMOS LOS DATOS               |");
@@ -69,10 +64,7 @@ public class AlquilarBarcos {
                             }
                         }
                         if (bandera) {
-                            System.out.println("|--------------------------------------------------|");
-                            System.out.println("| YA EXISTE OTRO BARCO CON LA MISMA MATRICULA,     |");
-                            System.out.println("| INTENTELO NUEVAMENTE                             |");
-                            System.out.println("|--------------------------------------------------|");
+                            imp.mensajeE2();
                         }
                     } while (bandera);
                     System.out.print("    ESLORA: ");
@@ -96,7 +88,7 @@ public class AlquilarBarcos {
                     }
                 }
             } catch (Exception e) {
-                mensajeE1();
+                imp.mensajeE1();
                 opc = 4;
             }
 
@@ -104,36 +96,65 @@ public class AlquilarBarcos {
 
     }
 
-    private boolean confirmarAdmin(String contUsuario) {
-        return contUsuario.equalsIgnoreCase("07Admin");
-    }
-
-    private void mensajeE1() {
-        System.out.println("|--------------------------------------------------|");
-        System.out.println("| OPCION DIGITADA NO PERTENECE A LAS OPCIONES      |");
-        System.out.println("|--------------------------------------------------|");
+    private boolean confirmarAdmin(String contUsuario, String nombreUsu) {
+        return contUsuario.equalsIgnoreCase("07Admin")
+                && nombreUsu.equalsIgnoreCase("Admin");
     }
 
     public void Mostrar() {
-        int opc;
+        crearMuelle();
+        int opc, opc2;
+        String nombre, contra;
         do {
-            System.out.println("|--------------------------------------------------|");
-            System.out.println("|     BIENVENIDOS A EMBARCACIONES FER CHIQUITO     |");
-            System.out.println("|--------------------------------------------------|");
-            System.out.println("|   1.- INICIAR SESION                             |");
-            System.out.println("|   2.- REGISTRARSE                                |");
-            System.out.println("|--------------------------------------------------|");
+            imp.Bienvenida();
             try {
                 System.out.print("   SELECCIONE UNA OPCION: ");
                 opc = scaner.nextInt();
-                if (opc > 2) {
-                    mensajeE1();
+                switch (opc) {
+                    case 1:
+                        System.out.print("    Usuario: ");
+                        nombre = scaner.next();
+                        System.out.print("    Contraseña(ID): ");
+                        contra = scaner.next();
+                        if (confirmarAdmin(contra, nombre)) {
+                            opcAdmin();
+                        }else{
+                            if(clientes.isEmpty() || 
+                                    !verificarCliente(nombre, contra)){
+                                imp.mensajeE3();
+                            }else if(verificarCliente(nombre, contra)) {
+                                
+                            }
+                        }
+                        break;
+                    case 2:
+
+                        break;
+                    default:
+                        imp.mensajeE1();
                 }
             } catch (Exception e) {
-                mensajeE1();
+                imp.mensajeE1();
                 opc = 3;
             }
         } while (opc > 2);
 
+    }
+
+    private void opcAdmin() {
+        int opc;
+        imp.menuAdmin();
+        System.out.println("     SELECCIONE UNA OPCION: ");
+
+    }
+    
+    private boolean verificarCliente(String usu, String cont){
+        for(Cliente aux : clientes){
+            if (aux.getNombreCli().equalsIgnoreCase(usu) &&
+                    aux.getIdCli().equalsIgnoreCase(cont)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
