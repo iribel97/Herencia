@@ -163,6 +163,6 @@ public class AlquilarBarcos {
     }
     
     private void crearUsu(){
-        
+        System.out.println("| |");
     }
 }
