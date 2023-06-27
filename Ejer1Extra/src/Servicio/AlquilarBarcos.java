@@ -74,18 +74,18 @@ public class AlquilarBarcos {
                     switch (opc) {
                         case 1:
                             System.out.print("    NUMERO DE MASTILES: ");
-                            barcos.add(new BarcoVelero(scaner.nextInt(), matricula, eslora, anio));
+                            barcos.add(new BarcoVelero(scaner.nextInt(), matricula.toUpperCase(), eslora, anio));
                             break;
                         case 2:
                             System.out.print("    POTENCIA CV: ");
-                            barcos.add(new BarcoMotor(scaner.nextInt(), matricula, eslora, anio));
+                            barcos.add(new BarcoMotor(scaner.nextInt(), matricula.toUpperCase(), eslora, anio));
                             break;
                         default:
                             System.out.print("    POTENCIA CV: ");
                             int potencia = scaner.nextInt();
                             System.out.print("    NUMERO DE CAMAROTES: ");
                             int numCam = scaner.nextInt();
-                            barcos.add(new BarcoYate(numCam, potencia, matricula, eslora, anio));
+                            barcos.add(new BarcoYate(numCam, potencia, matricula.toUpperCase(), eslora, anio));
                     }
                 }
             } catch (Exception e) {
@@ -97,9 +97,33 @@ public class AlquilarBarcos {
 
     }
 
+    private void crearUsu() {
+        String nombre, ID;
+
+        System.out.println("|--------------------------------------------------|");
+        System.out.println("|               VAMOS A REGISTRARNOS               |");
+        System.out.println("|--------------------------------------------------|");
+        System.out.print("    - Nombre: ");
+        nombre = scaner.nextLine();
+        System.out.print("    - ID: ");
+        ID = scaner.next();
+
+        clientes.add(new Cliente(nombre, ID));
+    }
+
     private boolean confirmarAdmin(String contUsuario, String nombreUsu) {
         return contUsuario.equalsIgnoreCase("07Admin")
                 && nombreUsu.equalsIgnoreCase("Admin");
+    }
+
+    private boolean verificarCliente(String usu, String cont) {
+        for (Cliente aux : clientes) {
+            if (aux.getNombreCli().equalsIgnoreCase(usu)
+                    && aux.getIdCli().equalsIgnoreCase(cont)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void Mostrar() {
@@ -114,24 +138,38 @@ public class AlquilarBarcos {
                 opc = scaner.nextInt();
                 switch (opc) {
                     case 1:
+                        System.out.println("|--------------------------------------------------|");
                         System.out.print("    Nombre: ");
                         nombre = scaner.next();
                         System.out.print("    ID: ");
                         contra = scaner.next();
+                        System.out.println("|--------------------------------------------------|");
+                        //Primero confirma si es el admin que estra tratando de ingresar
                         if (confirmarAdmin(contra, nombre)) {
+                            //que se repita el menu mientras que el admin no digite 5
                             do {
+                                //bandera guarda el valor que retorna e metodo
                                 bandera = opcAdmin();
                             } while (bandera);
-                            
+
                         } else {
+                            //si el arraylist clientes esta vacio o si el nombre no existe
                             if (clientes.isEmpty() || !verificarCliente(nombre, contra)) {
+                                //mostrar mensaje
                                 imp.mensajeE3();
                             } else if (verificarCliente(nombre, contra)) {
+                                for (Cliente aux : clientes) {
+                                    if (aux.getIdCli().equalsIgnoreCase(contra)) {
 
+                                    }
+                                }
                             }
                         }
                         break;
                     case 2:
+                        crearUsu();
+                        break;
+                    case 3:
 
                         break;
                     default:
@@ -139,20 +177,24 @@ public class AlquilarBarcos {
                 }
             } catch (Exception e) {
                 imp.mensajeE1();
-                opc = 3;
+                opc = 4;
             }
-        } while (opc > 2);
+        } while (opc != 3);
 
     }
 
     private boolean opcAdmin() {
         int opc;
         do {
+
+            //Menu de opciones para el usuario admin
             imp.menuAdmin();
             try {
+
                 System.out.print("     SELECCIONE UNA OPCION: ");
                 opc = scaner.nextInt();
-                if (opc > 4) {
+
+                if (opc > 5) {
                     imp.mensajeE1();
                 }
 
@@ -164,14 +206,19 @@ public class AlquilarBarcos {
 
         switch (opc) {
             case 1:
+                //admin agg mas barcos
                 crearBarco();
                 break;
             case 2:
+                //admin revise cuales estan arrendados
+
                 break;
             case 3:
+                //admin revise que barcos no se han arrendado
                 inventarioDisponible();
                 break;
             case 4:
+                //admin revise todas las embarcaciones
                 break;
             case 5:
                 break;
@@ -180,49 +227,83 @@ public class AlquilarBarcos {
 
     }
 
-    private boolean verificarCliente(String usu, String cont) {
-        for (Cliente aux : clientes) {
-            if (aux.getNombreCli().equalsIgnoreCase(usu)
-                    && aux.getIdCli().equalsIgnoreCase(cont)) {
-                return true;
+    private void opcCliente(Cliente cli) {
+        String matri;
+        boolean bandera = false;
+        int opc;
+        do {
+            try {
+                imp.menuCli(cli.getNombreCli());
+                System.out.print("   SELECCIONE UNA OPCION: ");
+                opc = scaner.nextInt();
+                if (opc > 2) {
+                    imp.mensajeE1();
+                }
+            } catch (Exception e) {
+                imp.mensajeE1();
+                opc = 3;
             }
-        }
-        return false;
-    }
+        } while (opc > 2);
 
-    private void crearUsu() {
-        System.out.println("| |");
+        switch (opc) {
+            case 1:
+                do {
+                    inventarioDisponible();
+                    System.out.print("   - INGRESE LA MATRICULA DE LA EMBARCACION A ARRENTAR: ");
+                    matri = scaner.next();
+                    for (Barco embarcacion : barcos) {
+                        if (embarcacion.getMatricula().equalsIgnoreCase(matri)) {
+                            bandera = true;
+                            cli.setBoat(embarcacion);
+                            System.out.println("|--------------------------------------------------|");
+                        }
+                    }
+                } while (!bandera);
+                break;
+            case 2:
+                break;
+        }
     }
 
     private void inventarioDisponible() {
         String vMatricula = "--- MATRICULA --", vEslora = "-- ESLORA --",
                 vAnioFab = "-- AÑO DE FABRICACION --", vMastiles = "-- MASTILES --",
-                vCV = "-- CV --", vCamarotes = "-- CAMAROTES -";
+                vCV = "-- CV --", vCamarotes = "-- CAMAROTES -", vTipoBarco = "-- TIPO EMBARCACION --";
 
-        System.out.println("|---------------------------------------------------------------------------------------------|");
-        System.out.println("|                         INVENTARIO DE EMBARCACIONES FER CHIKIS                              |");
-        System.out.println("|---------------------------------------------------------------------------------------------|");
-        System.out.println("|" + vMatricula + "|" + vEslora + "|" + vAnioFab + "|" + vMastiles + "|" + vCV + "|" + vCamarotes + "|");
+        System.out.println("|" + "-".repeat(116) + "|");
+        System.out.println("|" + " ".repeat(40) + "EMBARCACIONES DISPONIBLES FER CHIKIS" + " ".repeat(40) + "|");
+        System.out.println("|" + "-".repeat(116) + "|");
+        System.out.println("|" + vTipoBarco + "|" + vMatricula + "|" + vEslora + "|" + vAnioFab + "|" + vMastiles + "|"
+                + vCV + "|" + vCamarotes + "|");
         for (Barco aux : barcos) {
-            imp.imprimirCasilla(aux.getMatricula(),vMatricula);
-            imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
-            imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
-            
+
             if (aux instanceof BarcoVelero) {
-                imp.imprimirCasilla( String.valueOf(((BarcoVelero) aux).getNumMastiles()), vMastiles);
+                imp.imprimirCasilla("VELERO", vTipoBarco);
+                imp.imprimirCasilla(aux.getMatricula(), vMatricula);
+                imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
+                imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
+                imp.imprimirCasilla(String.valueOf(((BarcoVelero) aux).getNumMastiles()), vMastiles);
                 imp.imprimirCasilla("   --   ", vCV);
                 imp.imprimirCasilla("    --   ", vCamarotes);
-            }else if(aux instanceof BarcoYate){
-                imp.imprimirCasilla("   --   ",vMastiles);
+            } else if (aux instanceof BarcoYate) {
+                imp.imprimirCasilla("YATE", vTipoBarco);
+                imp.imprimirCasilla(aux.getMatricula(), vMatricula);
+                imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
+                imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
+                imp.imprimirCasilla("   --   ", vMastiles);
                 imp.imprimirCasilla(String.valueOf(((BarcoYate) aux).getPotenciaCV()), vCV);
-                imp.imprimirCasilla( String.valueOf(((BarcoYate) aux).getNumCamarotes()), vCamarotes);
-            }else if(aux instanceof BarcoMotor){
-                imp.imprimirCasilla("   --   ",vMastiles);
-                imp.imprimirCasilla( String.valueOf(((BarcoMotor) aux).getPotenciaCV()), vCV);
+                imp.imprimirCasilla(String.valueOf(((BarcoYate) aux).getNumCamarotes()), vCamarotes);
+            } else if (aux instanceof BarcoMotor) {
+                imp.imprimirCasilla("MOTOR", vTipoBarco);
+                imp.imprimirCasilla(aux.getMatricula(), vMatricula);
+                imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
+                imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
+                imp.imprimirCasilla("   --   ", vMastiles);
+                imp.imprimirCasilla(String.valueOf(((BarcoMotor) aux).getPotenciaCV()), vCV);
                 imp.imprimirCasilla("    --   ", vCamarotes);
             }
             System.out.println("|");
         }
-        System.out.println("|---------------------------------------------------------------------------------------------|");
+        System.out.println("|" + "-".repeat(116) + "|");
     }
 }

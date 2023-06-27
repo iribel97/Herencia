@@ -16,6 +16,7 @@ public class Imprimibles {
         System.out.println("|--------------------------------------------------|");
         System.out.println("|   1.- INICIAR SESION                             |");
         System.out.println("|   2.- REGISTRARSE                                |");
+        System.out.println("|   3.- SALIR                                      |");
         System.out.println("|--------------------------------------------------|");
     }
 
@@ -38,6 +39,15 @@ public class Imprimibles {
         System.out.println("|    3.- VER EMBARCACIONES NO ARRENDADAS           |");
         System.out.println("|    4.- VER EMBARCACIONES                         |");
         System.out.println("|    5.- SALIR                                     |");
+        System.out.println("|--------------------------------------------------|");
+    }
+    
+    public void menuCli(String nombre){
+        System.out.println("|--------------------------------------------------|");
+        System.out.printf("| MUCHO GUSTO %-67s|", nombre);
+        System.out.println("|--------------------------------------------------|");
+        System.out.println("|    1.- ALQUILAR EMBARCACION                      |");
+        System.out.println("|    2.- SALIR                                     |");
         System.out.println("|--------------------------------------------------|");
     }
   

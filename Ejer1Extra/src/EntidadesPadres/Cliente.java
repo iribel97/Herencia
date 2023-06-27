@@ -26,6 +26,15 @@ public class Cliente {
     public Cliente() {
     }
 
+    public Cliente(String nombreCli, String IdCli) {
+        this.nombreCli = nombreCli;
+        this.IdCli = IdCli;
+        this.fechaAlqu = LocalDate.of(2000, 1, 1);
+        this.fechaDev = LocalDate.of(2000, 1, 8);
+        this.posicionAm = 0;
+        this.boat = new Barco();
+    }
+
     public Cliente(String nombreCli, String IdCli, LocalDate fechaAlqu, LocalDate fechaDev, int posicionAm, Barco boat) {
         this.nombreCli = nombreCli;
         this.IdCli = IdCli;
