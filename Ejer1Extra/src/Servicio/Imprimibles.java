@@ -37,6 +37,7 @@ public class Imprimibles {
         System.out.println("|    2.- VER EMBARCACIONES ARRENDADAS              |");
         System.out.println("|    3.- VER EMBARCACIONES NO ARRENDADAS           |");
         System.out.println("|    4.- VER EMBARCACIONES                         |");
+        System.out.println("|    5.- SALIR                                     |");
         System.out.println("|--------------------------------------------------|");
     }
   
@@ -61,6 +62,34 @@ public class Imprimibles {
         System.out.println("|--------------------------------------------------|");
     }
     
+// CASILLAS TABLA --------------------------------------------------------------------
+    public void imprimirCasilla(String nombre, String variable) {
+        int tamanio;
+        String vAux;
+        System.out.print("|");
+
+        vAux = nombre;
+        tamanio = vAux.length();
+
+        if (tamanio % 2 == 0) {
+            for (int i = 0; i < (variable.length() - tamanio) / 2; i++) {
+                System.out.print(" ");
+            }
+            System.out.print(vAux);
+            for (int i = 0; i < (variable.length() - tamanio) / 2; i++) {
+                System.out.print(" ");
+            }
+        } else {
+            tamanio--;
+            for (int i = 0; i < (variable.length() - tamanio) / 2; i++) {
+                System.out.print(" ");
+            }
+            System.out.print(vAux);
+            for (int i = 0; i < (variable.length() - tamanio - 2) / 2; i++) {
+                System.out.print(" ");
+            }
+        }
+    }
     
 
 }
