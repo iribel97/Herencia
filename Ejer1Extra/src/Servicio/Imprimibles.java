@@ -44,7 +44,7 @@ public class Imprimibles {
     
     public void menuCli(String nombre){
         System.out.println("|--------------------------------------------------|");
-        System.out.printf("| MUCHO GUSTO %-67s|", nombre);
+        System.out.printf("| MUCHO GUSTO %-37s|\n", nombre);
         System.out.println("|--------------------------------------------------|");
         System.out.println("|    1.- ALQUILAR EMBARCACION                      |");
         System.out.println("|    2.- SALIR                                     |");
@@ -69,6 +69,12 @@ public class Imprimibles {
         System.out.println("|--------------------------------------------------|");
         System.out.println("| NO SE ENCUENTRA REGISTRADO/A EN NUESTRA          |");
         System.out.println("| BASE DE DATOS                                    |");
+        System.out.println("|--------------------------------------------------|");
+    }
+    
+    public void mensajeE4(){
+        System.out.println("|--------------------------------------------------|");
+        System.out.println("| AUN NO SE HAN ARRENDADO BARCOS                   |");
         System.out.println("|--------------------------------------------------|");
     }
     

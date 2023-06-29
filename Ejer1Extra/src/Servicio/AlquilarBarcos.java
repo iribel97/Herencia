@@ -20,6 +20,7 @@ public class AlquilarBarcos {
     private Scanner scaner = new Scanner(System.in);
     private ArrayList<Cliente> clientes = new ArrayList();
     private ArrayList<Barco> barcos = new ArrayList();
+    private ArrayList<Barco> barcosA = new ArrayList();
     private Imprimibles imp = new Imprimibles();
 
     private void crearMuelle() {
@@ -97,18 +98,19 @@ public class AlquilarBarcos {
 
     }
 
-    private void crearUsu() {
+    private Cliente crearUsu() {
         String nombre, ID;
 
         System.out.println("|--------------------------------------------------|");
         System.out.println("|               VAMOS A REGISTRARNOS               |");
         System.out.println("|--------------------------------------------------|");
+        scaner.nextLine();
         System.out.print("    - Nombre: ");
         nombre = scaner.nextLine();
         System.out.print("    - ID: ");
         ID = scaner.next();
 
-        clientes.add(new Cliente(nombre, ID));
+        return new Cliente(nombre, ID);
     }
 
     private boolean confirmarAdmin(String contUsuario, String nombreUsu) {
@@ -157,17 +159,17 @@ public class AlquilarBarcos {
                             if (clientes.isEmpty() || !verificarCliente(nombre, contra)) {
                                 //mostrar mensaje
                                 imp.mensajeE3();
-                            } else if (verificarCliente(nombre, contra)) {
+                            } else{
                                 for (Cliente aux : clientes) {
                                     if (aux.getIdCli().equalsIgnoreCase(contra)) {
-
+                                        opcCliente(aux);
                                     }
                                 }
                             }
                         }
                         break;
                     case 2:
-                        crearUsu();
+                        clientes.add(crearUsu());
                         break;
                     case 3:
 
@@ -176,7 +178,6 @@ public class AlquilarBarcos {
                         imp.mensajeE1();
                 }
             } catch (Exception e) {
-                imp.mensajeE1();
                 opc = 4;
             }
         } while (opc != 3);
@@ -211,7 +212,12 @@ public class AlquilarBarcos {
                 break;
             case 2:
                 //admin revise cuales estan arrendados
-
+                if(barcosA.isEmpty()){
+                    imp.mensajeE4();
+                }else{
+                    inventarioA();
+                }
+                
                 break;
             case 3:
                 //admin revise que barcos no se han arrendado
@@ -228,7 +234,7 @@ public class AlquilarBarcos {
     }
 
     private void opcCliente(Cliente cli) {
-        String matri;
+        String matri, fechaI, fechaF;
         boolean bandera = false;
         int opc;
         do {
@@ -256,6 +262,18 @@ public class AlquilarBarcos {
                             bandera = true;
                             cli.setBoat(embarcacion);
                             System.out.println("|--------------------------------------------------|");
+                            System.out.print(" - Fecha de hoy (yyyy-mm-dd): ");
+                            fechaI = scaner.next();
+                            cli.setFechaAlqu(LocalDate.parse(fechaI));
+                            System.out.print(" - Fecha de devolucion (yyyy-mm-dd): ");
+                            fechaF = scaner.next();
+                            cli.setFechaDev(LocalDate.parse(fechaF));
+                            System.out.println("|--------------------------------------------------|");
+                            cli.setPosicionAm((int)(Math.random()*20));
+                            System.out.println("  Su embarcacion se encuentra en la posicion " + cli.getPosicionAm());
+                            System.out.println(" y debe de pagar $" + cli.totalPag());
+                            barcosA.add(embarcacion);
+                            barcos.remove(embarcacion);
                         }
                     }
                 } while (!bandera);
@@ -276,6 +294,48 @@ public class AlquilarBarcos {
         System.out.println("|" + vTipoBarco + "|" + vMatricula + "|" + vEslora + "|" + vAnioFab + "|" + vMastiles + "|"
                 + vCV + "|" + vCamarotes + "|");
         for (Barco aux : barcos) {
+
+            if (aux instanceof BarcoVelero) {
+                imp.imprimirCasilla("VELERO", vTipoBarco);
+                imp.imprimirCasilla(aux.getMatricula(), vMatricula);
+                imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
+                imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
+                imp.imprimirCasilla(String.valueOf(((BarcoVelero) aux).getNumMastiles()), vMastiles);
+                imp.imprimirCasilla("   --   ", vCV);
+                imp.imprimirCasilla("    --   ", vCamarotes);
+            } else if (aux instanceof BarcoYate) {
+                imp.imprimirCasilla("YATE", vTipoBarco);
+                imp.imprimirCasilla(aux.getMatricula(), vMatricula);
+                imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
+                imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
+                imp.imprimirCasilla("   --   ", vMastiles);
+                imp.imprimirCasilla(String.valueOf(((BarcoYate) aux).getPotenciaCV()), vCV);
+                imp.imprimirCasilla(String.valueOf(((BarcoYate) aux).getNumCamarotes()), vCamarotes);
+            } else if (aux instanceof BarcoMotor) {
+                imp.imprimirCasilla("MOTOR", vTipoBarco);
+                imp.imprimirCasilla(aux.getMatricula(), vMatricula);
+                imp.imprimirCasilla(String.valueOf(aux.getEslora()), vEslora);
+                imp.imprimirCasilla(String.valueOf(aux.getAnioFab()), vAnioFab);
+                imp.imprimirCasilla("   --   ", vMastiles);
+                imp.imprimirCasilla(String.valueOf(((BarcoMotor) aux).getPotenciaCV()), vCV);
+                imp.imprimirCasilla("    --   ", vCamarotes);
+            }
+            System.out.println("|");
+        }
+        System.out.println("|" + "-".repeat(116) + "|");
+    }
+    
+    private void inventarioA() {
+        String vMatricula = "--- MATRICULA --", vEslora = "-- ESLORA --",
+                vAnioFab = "-- AÑO DE FABRICACION --", vMastiles = "-- MASTILES --",
+                vCV = "-- CV --", vCamarotes = "-- CAMAROTES -", vTipoBarco = "-- TIPO EMBARCACION --";
+
+        System.out.println("|" + "-".repeat(116) + "|");
+        System.out.println("|" + " ".repeat(40) + "EMBARCACIONES DISPONIBLES FER CHIKIS" + " ".repeat(40) + "|");
+        System.out.println("|" + "-".repeat(116) + "|");
+        System.out.println("|" + vTipoBarco + "|" + vMatricula + "|" + vEslora + "|" + vAnioFab + "|" + vMastiles + "|"
+                + vCV + "|" + vCamarotes + "|");
+        for (Barco aux : barcosA) {
 
             if (aux instanceof BarcoVelero) {
                 imp.imprimirCasilla("VELERO", vTipoBarco);
